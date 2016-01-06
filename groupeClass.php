@@ -18,8 +18,8 @@ class Groupe
 
 	function ajouterEquipe($eq)
 	{
-								//[ idEq 	  => [nom,pts,matchGagner,matchNulAvecBut,matchNulSansBut,matchPerdu,butMis,butPris,Diff] ]
-		$this->listeEquipes[] = {$eq->getId() => {$eq->getNom(),0	 ,0			 ,0				 ,0				 ,0		    ,0	   ,0	   ,0	} }
+							  //[ idEq 	     => [nom,pts,matchGagner,matchNulAvecBut,matchNulSansBut,matchPerdu,butMis,butPris,Diff] ]
+		$this->listeEquipes[] = $eq->getId() => {$eq->getNom(),0	 ,0			 ,0				 ,0				 ,0		    ,0	   ,0	   ,0	} }
 	}
 
 	function getListeEquipe()
@@ -36,8 +36,8 @@ class Groupe
 		$pdo->commit();
 	}
 
-	function __toString()
+	public function __toString()
 	{
-		$s = '<table><tr><th>Equi'
+		
 	}
 }
