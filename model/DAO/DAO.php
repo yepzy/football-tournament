@@ -16,13 +16,13 @@
 			$this->connect();
 			//Table TeamSource
 			$this->connexion->query('CREATE TABLE TeamSource (
-															id INT,
+															id INT NOT NULL AUTO_INCREMENT,
 															name VARCHAR(50) NOT NULL,
 															PRIMARY KEY (id)
 														);');
 			//Table Team
 			$this->connexion->query('CREATE TABLE Team (
-															id INT,
+															id INT NOT NULL AUTO_INCREMENT,
 															state INT NOT NULL,
 															group INT,
 															idTeam INT NOT NULL,
@@ -40,7 +40,7 @@
 														);');
 			//Table Match
 			$this->connexion->query('CREATE TABLE Match (
-															id INT,
+															id INT NOT NULL AUTO_INCREMENT,
 															State INT NOT NULL,
 															Group INT,
 															Team_1 VARCHAR(50) NOT NULL FOREIGN KEY REFERENCES TeamSource(id),
@@ -53,9 +53,8 @@
 														);');
 			//Table RankingMatch
 			$this->connexion->query('CREATE TABLE RankingMatch (
-															id INT,
+															id INT NOT NULL AUTO_INCREMENT,
 															State INT NOT NULL,
-															Group INT,
 															Team_1 VARCHAR(50) NOT NULL FOREIGN KEY REFERENCES TeamSource(id),
 															Score_Team_1 INT(3),
 															Score_Team_2 INT(3),
@@ -66,7 +65,15 @@
 															PRIMARY KEY (id),
 															FOREIGN KEY (Team_1) REFERENCES TeamSource(id),
 															FOREIGN KEY (Team_2) REFERENCES TeamSource(id)
-														);');			
+														);');	
+			//Table parameter
+			$this->connexion->query('CREATE TABLE parameters (
+															id INT NOT NULL AUTO_INCREMENT,
+															name VARCHAR(50) NOT NULL,
+															valueINT INT,
+															valueSTR VARCHAR(50),
+															PRIMARY KEY (id)
+														);');		
 			$this->disconnect();
 		}
 
@@ -83,49 +90,68 @@
 	      	}
 		}
 
+		public function getParameters()
+		{
+			try
+			{
+				$this->connect();
+				return $this->connexion->query('SELECT * FROM parameters')->fetchAll();
+				$this->disconnect();
+			}
+			catch(PDOException $e)
+			{
+				echo '<script>alert("'.$e->getMessage().'");</script>';
+			}
+		}
+
 		//TeamSource DAO
 		public function getTeamSrcList()
 		{
 			try
 			{
+				$this->connect();
 				return $this->connexion->query('SELECT * FROM TeamSource')->fetchAll(PDO::FETCH_CLASS,'TeamSource');
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
 			}
 		}
-
 		public function getTeamSrc($idTeam)
 		{
 			try
 			{
+				$this->connect();
 				$team = $this->connexion->query('SELECT * FROM TeamSource WHERE id ='.$idTeam)->fetchAll(PDO::FETCH_CLASS,'TeamSource');
 				return $team[0];
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
 			}
 		}
-
 		public function addTeamSrc($team)
 		{
 			try
 			{
+				$this->connect();
 				$this->connexion->query('INSERT INTO TeamSource (name) VALUES ("'.$team->getName().'")');
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
 			}
 		}
-
 		public function deleteTeamSrc($idTeam)
 		{
 			try
 			{	
+				$this->connect();
 				$this->connexion->query('DELETE FROM TeamSource WHERE id='.$idTeam);
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
@@ -134,49 +160,53 @@
 		}
 
 		//Team DAO
-
 		public function getTeamList($numState,$numGroup)
 		{
 			try
 			{
+				$this->connect();
 				return $this->connexion->query('SELECT * FROM Team WHERE state='.$numState.' ,group='.$numGroup)->fetchAll(PDO::FETCH_CLASS,'Team');
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
 			}
 		}
-
 		public function getTeam($idTeam)
 		{
 			try
 			{
+				$this->connect();
 				$team = $this->connexion->query('SELECT * FROM Team WHERE idTeam ='.$idTeam)->fetchAll(PDO::FETCH_CLASS,'Team');
 				return $team[0];
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
 			}
 		}
-
 		public function addTeam($team)
 		{
 			try
 			{
+				$this->connect();
 				$this->connexion->query('INSERT INTO Team (state,group,idTeam) VALUES ("'.$team->getName().'")');
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
 			}
 		}
-
 		public function deleteTeam($idTeam)
 		{
 			try
 			{	
+				$this->connect();
 				$this->connexion->query('DELETE FROM Team WHERE id='.$idTeam);
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
@@ -189,31 +219,35 @@
 		{
 			try
 			{
+				$this->connect();
 				return $this->connexion->query('SELECT * FROM Match WHERE state='.$numState)->fetchAll(PDO::FETCH_CLASS,'Match');
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
 			}
 		}
-
 		public function getMatch($idMatch)
 		{
 			try
 			{
+				$this->connect();
 				return $this->connexion->query('SELECT * FROM Match WHERE id='.$idMatch)->fetchAll(PDO::FETCH_CLASS,'Match');
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
 			}
 		}
-
 		public function addMatch($match)
 		{
 			try
 			{
+				$this->connect();
 				$this->connexion->query('INSERT INTO Match (hour,place,state,Team_1,scoreTeam_1,scoreTeam_2,Team_2) VALUES ("'.$match->getTime().'","'.$match->getPlace().'",'.$match->getState().','.$match->getEq1().','.$match->getScoreEq1().','.$match->Eq2().','.$match->scoreEq2().')');
+				$this->disconnect();
 			}
 			catch(PDOException $e)
 			{
@@ -224,7 +258,10 @@
 		{
 			try
 			{
+				$this->connect()
 				$this->connexion->query('DELETE FROM Match WHERE id='.$match->getId());
+				$this->disconnect();
+			}
 			catch(PDOException $e)
 			{
 				echo '<script>alert("'.$e->getMessage().'");</script>';
