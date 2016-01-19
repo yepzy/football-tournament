@@ -12,6 +12,10 @@ public class Router
 	
 	public function __construct()
 	{
+<<<<<<< HEAD
 		# code...
+=======
+		
+>>>>>>> 68d63f685d699b83c33736319e7f96bac5d9ff32
 	}
 }
